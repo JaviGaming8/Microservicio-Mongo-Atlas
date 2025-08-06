@@ -189,4 +189,36 @@ router.get('/protegido', verificarToken, (req, res) => {
   res.json({ message: 'Ruta protegida', usuario: req.usuario });
 });
 
+// Cambiar contraseña (requiere estar autenticado)
+router.post('/cambiar-contrasena', verificarToken, async (req, res) => {
+  const { contrasenaActual, nuevaContrasena } = req.body;
+
+  if (!contrasenaActual || !nuevaContrasena) {
+    return res.status(400).json({ message: 'Se requieren ambas contraseñas' });
+  }
+
+  try {
+    const usuario = await Usuario.findById(req.usuario.id);
+
+    if (!usuario) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+
+    // Comparar la contraseña actual (texto plano, inseguro — deberías usar hashing)
+    if (usuario.Contraseña !== contrasenaActual) {
+      return res.status(401).json({ message: 'La contraseña actual es incorrecta' });
+    }
+
+    // Cambiar la contraseña
+    usuario.Contraseña = nuevaContrasena;
+    await usuario.save();
+
+    res.status(200).json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (error) {
+    console.error('Error al cambiar la contraseña:', error);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+});
+
+
 module.exports = router;

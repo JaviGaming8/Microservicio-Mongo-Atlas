@@ -3,7 +3,7 @@ const crypto = require('crypto');
 
 const secretKey = Buffer.from(process.env.JWT_SECRET, 'base64');
 
-// 🔐 Generar Access Token con claims personalizados
+// Generar Access Token
 const generateAccessToken = (usuario) => {
   const token = jwt.sign(
     {
@@ -18,7 +18,7 @@ const generateAccessToken = (usuario) => {
     }
   );
 
-  return token; // JWT estándar
+  return token; 
 };
 
 
@@ -27,12 +27,12 @@ const generateRefreshToken = (tamañoBytes = 32) => {
   return randomBytes.toString('base64');
 };
 
-// ✅ Verificar Access Token
+//  Verificar Access Token
 const verifyAccessToken = (token) => {
   return jwt.verify(token, secretKey);
 };
 
-// 🔐 Comparar refresh token recibido vs guardado
+// Comparar refresh token recibido vs guardado
 const isValidRefreshToken = (tokenFromClient, tokenInDb) => {
   return tokenFromClient === tokenInDb;
 };
