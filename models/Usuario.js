@@ -6,6 +6,6 @@ const UsuarioSchema = new mongoose.Schema({
   "Pregunta de Recuperacion": String,
   "Respuesta de Recuperacion": String,
   refreshToken: String 
-}, { collection: 'UsuariosLogin' });
+}, { collection: 'Usuarios' });
 
 module.exports = mongoose.model('Usuario', UsuarioSchema);
